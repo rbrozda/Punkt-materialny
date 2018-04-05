@@ -2,8 +2,9 @@ import java.util.Scanner;
 
 public class Punkt_materialny 
 {
-	public int promien=0;
-	private double Masa; //prywatne pole masy punktu materialnego
+	public int promien;
+	public static double odleglosc = 2;
+	protected double Masa; //prywatne pole masy punktu materialnego
 	
 	public void setMasa(double m) //kontrola wartoœci zmiennej Masa
 	{
@@ -14,18 +15,18 @@ public class Punkt_materialny
 			m=input.nextDouble();
 			System.out.print("\n");
 		}
-		System.out.print("Podano dobr¹ wartoœæ masy. ");
+		//System.out.println("Podano dobr¹ wartoœæ masy. ");
 		Masa = m;
 	}
 	
-	public void getMasa() //akcesor
+	public double getMasa() //akcesor
 	{
-		System.out.print(Masa);
+		return Masa;
 	}
 	
 	public Punkt_materialny() //konstruktor domyœlny ustawiaj¹cy masê na 10
 	{
-		Masa = 10;
+		Masa = 60;
 	}
 	
 	public Punkt_materialny(double mass) //konstruktor z parametrem
@@ -33,18 +34,14 @@ public class Punkt_materialny
 		setMasa(mass);
 	}
 
-	public void momentBezw() //metoda obliczaj¹ca g³ówny moment bezw³adnoœci punktu materialnego
+	public double momentBezw() //metoda obliczaj¹ca g³ówny moment bezw³adnoœci punktu materialnego
 	{
-		double I;
-		I=Masa*promien*promien;
-		System.out.print(I);
+		return Masa*promien*promien;
 	}
 	
-	public void momentSteiner(double odleglosc) //metoda obliczaj¹ca moment bezw³adnoœci punktu materialnego z twierdzenia Steinera
+	public double momentSteiner(double odleglosc) //metoda obliczaj¹ca moment bezw³adnoœci punktu materialnego z twierdzenia Steinera
 	{
-		double I=Masa*promien*promien;
-		double ISteiner=I+(Masa*odleglosc*odleglosc);
-		System.out.print(ISteiner);
+		return( momentBezw() + (Masa*odleglosc*odleglosc));	
 	}
 	
 	public void opis() //metoda zwracaj¹ca opis obiektu
@@ -56,100 +53,169 @@ public class Punkt_materialny
 	
 public static void main(String[] args)
 {
-	//Podpunkt 1: obiekt klasy z u¿yciem konstruktora domyœlnego
-	Punkt_materialny punkt1 = new Punkt_materialny(); 
+	//Podpunkt 1: Stworzenie obiektów klas pochodnych za pomoc¹ konstruktorów z parametrami
+	Walec walec1 = new Walec(10,10);
+	Kula kula1 = new Kula(8,8);
+	Pret pret1 = new Pret(6,6);
 	
-	//Podpunkt 2: obiekt klasy z u¿yciem konstruktora z parametrem
-	Punkt_materialny punkt2 = new Punkt_materialny(20); 
 	
-	//Podpunkt 3: Wyœwietlenie na konsoli opisu, masy, g³ównego momentu bezw³adnoœci i momentu bezw³adnoœci wzglêdem nowej osi dla punktu 1
-	punkt1.opis();
-	System.out.print(" o masie ");
-	punkt1.getMasa();
+	
+	
+	//Podpunkt 2: Wyœwietlenie na konsoli informacji zawieraj¹cej opis, dane i wartoœci momentów bezw³adnoœci
+	//dla wszystkich obiektów.
+	System.out.println();
+	walec1.opis();
+	System.out.println(" o masie " + walec1.getMasa() + " i promieniu podstawy " + walec1.getpromienWalca() + ".");
+	System.out.println("G³owny moment bezw³adnoœci walca wynosi " + walec1.momentBezw() + ".");
+	
+	System.out.println();
+	kula1.opis();
+	System.out.println(" o masie " + kula1.getMasa() + " i promieniu " + kula1.getpromienKuli() + ".");
+	System.out.println("G³owny moment bezw³adnoœci kuli wynosi " + kula1.momentBezw() + ".");
+	
+	System.out.println();
+	pret1.opis();
+	System.out.println(" o masie " + pret1.getMasa() + " i d³ugoœci " + pret1.getDlugoscPreta() + ".");
+	System.out.println("G³owny moment bezw³adnoœci prêta wynosi " + pret1.momentBezw() + ".");
 	System.out.println();
 	
-	System.out.print("G³ówny moment bezw³adnoœci punktu: ");
-	punkt1.momentBezw();
-	System.out.println();
-	
-	System.out.print("Moment bezw³adnoœci punktu z twierdzenia Steinera: ");
-	punkt1.momentSteiner(4);
-	System.out.print("\n\n\n");
 	
 	
-	
-	//Podpunkt 3 c.d.: Wyœwietlenie na konsoli opisu, masy, g³ównego momentu bezw³adnoœci i momentu bezw³adnoœci wzglêdem nowej osi dla punktu 2
-	punkt2.opis();
-	System.out.print(" o masie ");
-	punkt2.getMasa();
-	System.out.println();
-	
-	System.out.print("G³ówny moment bezw³adnoœci punktu: ");
-	punkt2.momentBezw();
-	System.out.println();
-	
-	System.out.print("Moment bezw³adnoœci punktu z twierdzenia Steinera: ");
-	punkt2.momentSteiner(4);
-	System.out.print("\n\n\n");
-	
-	
-	
-	//Podpunkt 4: Zmiana wartoœci masy pierwszego obiektu
-	System.out.print("Zmiana masy pierwszego obiektu. Podaj now¹ masê: ");
-	double m;
-	Scanner wejscie = new Scanner(System.in);
-	m=wejscie.nextDouble(); //Wprowadzanie wartoœci z klawiatury
-	punkt1.setMasa(m);
-	
-	
-	
-	//Podpunkt 5: Wyœwietlanie na konsoli opisu, masy, i wartoœci momentów dla zmienionego obiektu
-	punkt1.opis();
-	System.out.print(" o masie ");
-	punkt1.getMasa();
-	System.out.println();
-	
-	System.out.print("G³ówny moment bezw³adnoœci punktu: ");
-	punkt1.momentBezw();
-	System.out.println();
-	
-	System.out.print("Moment bezw³adnoœci punktu z twierdzenia Steinera: ");
-	punkt1.momentSteiner(4);
-	System.out.print("\n\n\n");
-	
-	
-	
-	//Podpunkt 6: Tablica z wartoœciami mas punktów; masy wprowadzane rêcznie; z kontrol¹ wartoœci
-	System.out.println("Podaj 5 mas punktów: ");	
-	double[] tablicaMas = new double[5]; //Deklaracja tablicy 5-elementowej
+	//Podpunkt 3: Stworzenie tablicy obiektów ró¿nych klas pochodnych.
+	double[] tablicaMas = new double[3]; //Deklaracja tablicy z masami bry³
 	Scanner in = new Scanner(System.in);
-	for(int i=0; i<5; i++)
-	{	
-		tablicaMas[i] = in.nextDouble(); //Wprowadzanie wartoœci z klawiatury
-
-		while (tablicaMas[i]<=0) //Kontrola wartoœci masy
+	for(int i=0; i<3; i++)
+	{
+		switch (i)
 		{
-			System.out.print("Podano z³¹ wartoœæ masy. Spróbuj ponownie. ");
-			tablicaMas[i] = in.nextDouble();
+			case 0: 
+			{
+				System.out.println("Podaj masê walca: ");
+				tablicaMas[i] = in.nextDouble(); //Wprowadzanie wartoœci z klawiatury
+				walec1.setMasa(tablicaMas[i]);
+				break;
+			}
+			
+			case 1: 
+			{
+				System.out.println("Podaj masê kuli: ");
+				tablicaMas[i] = in.nextDouble(); 
+				kula1.setMasa(tablicaMas[i]);
+				break;
+			}
+			case 2: 
+			{
+				System.out.println("Podaj masê prêta: ");
+				tablicaMas[i] = in.nextDouble(); 
+				pret1.setMasa(tablicaMas[i]);
+				break;
+			}
 		}
 	}
 	
-	
-	
-	//Podpunkt 7: Wyœwietlanie na konsoli opisu, masy, i wartoœci momentów punktów
-	for(int k=0; k<5; k++)
+	double[] tablicaPromieni = new double[3]; //Deklaracja tablicy z promieniami/d³ugoœciami bry³
+	for(int k=0; k<3; k++)
 	{
-		Punkt_materialny punkt = new Punkt_materialny(tablicaMas[k]); //Nowy obiekt
-		punkt.opis();
-		System.out.println(" o masie: "+tablicaMas[k]);		
-		
-		System.out.print("G³ówny moment bezw³adnoœci punktu: "); 
-		punkt.momentBezw();
-		System.out.println();
-		
-		System.out.print("Moment bezw³adnoœci punktu z twierdzenia Steinera: ");
-		punkt.momentSteiner(4);
-		System.out.print("\n\n");
+		switch (k)
+		{
+			case 0: 
+			{
+				System.out.println("Podaj promieñ walca: ");
+				tablicaPromieni[k] = in.nextDouble(); 
+				walec1.setPromienWalca(tablicaPromieni[k]);
+				break;
+			}
+			
+			case 1: 
+			{
+				System.out.println("Podaj promieñ kuli: ");
+				tablicaPromieni[k] = in.nextDouble(); 
+				kula1.setPromienKuli(tablicaPromieni[k]);
+				break;
+			}
+			case 2: 
+			{
+				System.out.println("Podaj d³ugoœæ prêta: ");
+				tablicaPromieni[k] = in.nextDouble(); 
+				pret1.setDlugoscPreta(tablicaPromieni[k]);
+				break;
+			}
+		}	
 	}
-  }
+	
+	System.out.println();
+	
+	
+	//Podpunkt 4: Wyœwietlenie na konsoli informacji zawieraj¹cej opis, dane i wartoœci g³ównych
+	//momentów bezw³adnoœci dla wszystkich obiektów w tablicy z wykorzystaniem pêtli.
+	for(int j=0; j<3; j++)
+	{
+		switch (j) 
+		{
+			case 0:
+			{
+				walec1.opis();
+				System.out.println(" o masie " + tablicaMas[j] + " i promieniu podstawy " + tablicaPromieni[j] + ".");
+				System.out.println("G³owny moment bezw³adnoœci walca wynosi " + walec1.momentBezw() + ".");
+				System.out.println();
+				break;
+			}
+			
+			case 1:
+			{
+				kula1.opis();
+				System.out.println(" o masie " + tablicaMas[j] + " i promieniu " + tablicaPromieni[j] + ".");
+				System.out.println("G³owny moment bezw³adnoœci kuli wynosi " + kula1.momentBezw() + ".");
+				System.out.println();
+				break;
+			}
+			
+			case 2:
+			{
+				pret1.opis();
+				System.out.println(" o masie " + tablicaMas[j] + " i d³ugoœci " + tablicaPromieni[j] + ".");
+				System.out.println("G³owny moment bezw³adnoœci prêta wynosi " + pret1.momentBezw() + ".");
+				System.out.println();
+				break;
+			}
+		}
+	}
+	
+	//Podpunkt 5: Wyœwietlenie wartoœci momentów bezw³adnoœci wzglêdem nowej osi oddalonej o tê sam¹
+	//odleg³oœæ dla wszystkich obiektów w tablicy z wykorzystaniem pêtli.
+	
+	for(int p=0; p<3; p++)
+	{
+		switch (p) 
+		{
+			case 0:
+			{
+				System.out.println("Moment bezw³adnoœci wzglêdem osi oddalonej o " + odleglosc + 
+						" wynosi: " + walec1.momentSteiner(odleglosc));
+				break;
+			}
+			
+			case 1:
+			{
+				System.out.println("Moment bezw³adnoœci wzglêdem osi oddalonej o " + odleglosc + 
+						" wynosi: " + kula1.momentSteiner(odleglosc));
+				break;
+			}
+			
+			case 2:
+			{
+				System.out.println("Moment bezw³adnoœci wzglêdem osi oddalonej o " + odleglosc + 
+						" wynosi: " + pret1.momentSteiner(odleglosc));
+				break;
+			}
+		}
+	}
 }
+}
+
+
+
+
+
+
+
